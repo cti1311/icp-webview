@@ -40,11 +40,12 @@
         console.log(data);
         var handlers = {
           responseHandler: function (BOLT) {
-            window.alert(BOLT.response.txnStatus);
             if (BOLT.response.txnStatus == "SUCCESS") {
+              window.location = "https://google.com"
               console.log('Your payment has been successful');
             }
             if (BOLT.response.txnStatus == "FAILED") {
+              window.location = "https://yahoo.com"
               console.log('Payment failed. Please try again.');
             }
             if (BOLT.response.txnStatus == "CANCEL") {
@@ -52,7 +53,6 @@
             }
           },
           catchException: function (BOLT) {
-            window.alert("exec" + BOLT)
             console.log('Payment failed. Please try again.');
           }
         };
