@@ -33,8 +33,8 @@
           email: "text@example.com",
           phone: "1234567890",
           productinfo: 'BOLT',
-          surl: '/',
-          furl: '/',
+          surl: '',
+          furl: 'https://devapi.stashfin.com/v2/api/returnToApp',
           lastname: 'soni'
         };
         console.log(data);
@@ -52,6 +52,7 @@
             }
           },
           catchException: function (BOLT) {
+            window.alert("exec" + BOLT)
             console.log('Payment failed. Please try again.');
           }
         };
