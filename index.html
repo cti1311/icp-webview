@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://apitest.payu.in/js-sdks/bolt.min.js"></script>
+  </head>
+
+  <body>
+    <script>
+      async function digestMessage(message) {
+        const msgUint8 = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest("SHA-512", msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+        return hashHex;
+      }
+
+      (async () => {
+        let txnid = Math.floor(Math.random() * 1000000000);
+        let hash = await digestMessage("QyT13U" + '|' + txnid + '|' + 1 + '|' + 'BOLT' + '|' + 'surbhi' + '|' + 'text@example.com|||||||||||UnJ0FGO0kt3dUgnHo9Xgwi0lpipBV0hB');
+        var data = {
+          key: 'QyT13U',
+          hash: hash,
+          txnid: txnid,
+          amount: '1',
+          firstname: 'surbhi',
+          email: "text@example.com",
+          phone: "1234567890",
+          productinfo: 'BOLT',
+          surl: 'https://test.payu.in/admin/test_response',
+          furl: 'https://test.payu.in/admin/test_response',
+          lastname: 'soni'
+        };
+        console.log(data);
+        var handlers = {
+          responseHandler: function (BOLT) {
+            window.alert(BOLT.response.txnStatus);
+            if (BOLT.response.txnStatus == "SUCCESS") {
+              console.log('Your payment has been successful');
+            }
+            if (BOLT.response.txnStatus == "FAILED") {
+              console.log('Payment failed. Please try again.');
+            }
+            if (BOLT.response.txnStatus == "CANCEL") {
+              console.log('Payment failed. Please try again.');
+            }
+          },
+          catchException: function (BOLT) {
+            console.log('Payment failed. Please try again.');
+          }
+        };
+        bolt.launch(data, handlers);
+      }
+      )();
+    </script>
+  </body>
+
+</html>
